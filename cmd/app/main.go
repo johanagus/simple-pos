@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/johanagus/simple-pos/database"
+	"github.com/johanagus/simple-pos/models"
 	"github.com/johanagus/simple-pos/router"
 	"github.com/sirupsen/logrus"
 
@@ -19,6 +21,20 @@ func main() {
 	}
 
 	router.New(app)
+
+	db := database.Init()
+	db.AutoMigrate(
+		&models.User{},
+		&models.Product{},
+		&models.Customer{},
+		&models.Supplier{},
+		&models.Inventory{},
+		&models.SalesPayment{},
+		&models.Sales{},
+		&models.SalesItem{},
+		&models.SalesOrder{},
+		&models.SalesOrderItem{},
+		&models.Warehouse{})
 
 	logger.SetOutput(file)
 	logger.Fatal(app.Listen(":8000"))
